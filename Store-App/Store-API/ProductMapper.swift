@@ -10,11 +10,11 @@ import Foundation
 struct ProductMapper {
     func map(data: Data,from response: HTTPURLResponse) throws -> [ProductResponse] {
         guard response.statusCode == 200,
-              let root = try? JSONDecoder().decode(RemoteProductResponse.self, from: data) else{
+              let root = try? JSONDecoder().decode([RemoteProductResponse].self, from: data) else{
             throw ProductsService.ProductsServiceError.invalidData
         }
         
-        return root.toDomain()
+        return root.map { $0.toDomain() }
         
     }
 }

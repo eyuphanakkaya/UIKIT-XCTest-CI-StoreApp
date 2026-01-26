@@ -12,8 +12,8 @@ struct ProductResponse {
     let title: String
     let price: Double
     let description: String
-    let category: String
-    let image: String
+    let category: CategoryResponse
+    let images: [String]
 }
 
 struct RemoteProductResponse: Decodable {
@@ -21,12 +21,12 @@ struct RemoteProductResponse: Decodable {
     let title: String
     let price: Double
     let description: String
-    let category: String
-    let image: String
+    let category: CategoryResponse
+    let images: [String]
     
 }
 extension RemoteProductResponse {
-    func toDomain() -> [ProductResponse] {
-        return [ProductResponse(id: id, title: title, price: price, description: description, category: category, image: image)]
+    func toDomain() -> ProductResponse {
+        return ProductResponse(id: id, title: title, price: price, description: description, category: category, images: images)
     }
 }
