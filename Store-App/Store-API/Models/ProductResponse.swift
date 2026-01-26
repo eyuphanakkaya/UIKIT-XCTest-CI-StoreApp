@@ -26,7 +26,7 @@ struct RemoteProductResponse: Decodable {
     
 }
 extension RemoteProductResponse {
-    func toDomain() -> [ProductResponse] {
-        return [ProductResponse(id: id, title: title, price: price, description: description, category: category, image: image)]
+    func toDomain() -> ProductResponse {
+        return ProductResponse(id: id, title: title, price: price, description: description, category: category, image: image)
     }
 }
