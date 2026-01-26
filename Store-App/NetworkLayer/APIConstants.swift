@@ -8,5 +8,5 @@
 import Foundation
 
 struct APIConstants {
-    static let baseURL: String = "https://api.escuelajs.co/api/v1/"
+    static let baseURL: String = "https://fakestoreapi.com/"
 }
