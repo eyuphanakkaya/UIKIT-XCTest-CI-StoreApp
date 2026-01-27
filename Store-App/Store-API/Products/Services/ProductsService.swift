@@ -7,11 +7,7 @@
 
 import Foundation
 
-protocol ProductLoader {
-    func load(completion: @escaping(Result<[ProductResponse],Error>)-> Void)
-}
-
-final class ProductsService: ProductLoader {
+final class ProductsService {
     private let client: HTTPClient
     private let url: URL
     

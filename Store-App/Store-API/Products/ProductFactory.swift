@@ -14,9 +14,9 @@ final class ProductFactory {
         let urlString = APIConstants.baseURL + "products"
         let url = URL(string: urlString)!
         
-        let loader = ProductsService(client: client, url: url)
-        
-        let vc = ProductsVC(loader: loader)
+        let service = ProductsService(client: client, url: url)
+        let viewModel = ProductsVM(service: service)
+        let vc = ProductsVC(viewModel: viewModel)
         return vc
     }
 }
