@@ -15,6 +15,7 @@ final class ProductsVC: UIViewController {
         layout.scrollDirection = .vertical
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .none
 
         return collectionView
     }()
@@ -53,7 +54,9 @@ final class ProductsVC: UIViewController {
         
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview().offset(16)
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview()
         }
     }
     
@@ -63,7 +66,8 @@ final class ProductsVC: UIViewController {
 
 private extension ProductsVC {
     func setupUI() {
-        
+        view.backgroundColor = .white
+        navigationController?.title = "Products"
     }
     
     func setupConstraints() {
@@ -82,6 +86,18 @@ extension ProductsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         return cell
     }
-    
-    
+}
+
+extension ProductsVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let itemsPerRow: CGFloat = 2
+        let spacing: CGFloat = 8
+        let padding: CGFloat = 4 * 2
+        
+        let totalSpacing = (itemsPerRow - 1) * spacing + padding
+        let availableWidth = collectionView.bounds.width - totalSpacing
+        let cellWidth = availableWidth / itemsPerRow
+        
+        return CGSize(width: cellWidth, height: cellWidth + 20)
+    }
 }
