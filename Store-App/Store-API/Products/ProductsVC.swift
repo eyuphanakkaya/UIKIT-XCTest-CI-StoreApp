@@ -97,6 +97,12 @@ extension ProductsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.configure(to: product)
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let viewController = ProductDetailFactory().makeViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension ProductsVC: UICollectionViewDelegateFlowLayout {
