@@ -16,6 +16,12 @@ struct ProductResponse {
     let image: String
 }
 
+extension ProductResponse {
+    func priceFormatted() -> String {
+        return "\(price) $"
+    }
+}
+
 struct RemoteProductResponse: Decodable {
     let id: Int
     let title: String

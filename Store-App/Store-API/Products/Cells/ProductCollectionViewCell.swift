@@ -25,6 +25,11 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(to product: ProductResponse) {
+        titleLabel.text = product.title
+        priceLabel.text = product.priceFormatted()
+    }
 }
 
 private extension ProductCollectionViewCell {
@@ -62,12 +67,10 @@ private extension ProductCollectionViewCell {
             make.left.right.equalToSuperview().inset(24)
         }
         
-        titleLabel.text = "WD 2TB Elements portable external Hard Drive"
         titleLabel.font = .systemFont(ofSize: 12)
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 3
         
-        priceLabel.text = "USD 199.99"
         priceLabel.font = .boldSystemFont(ofSize: 16)
         priceLabel.numberOfLines = 1
     }
