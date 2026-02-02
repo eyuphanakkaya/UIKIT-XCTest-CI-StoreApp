@@ -13,6 +13,7 @@ final class ProductDetailVC: UIViewController {
     private let viewModel: ProductDetailsVM
     private let productHeroView = ProductHeroView()
     private let addActionView = AddActionView()
+    private let descriptionView = DescriptionView()
     private let stackView = UIStackView()
 
     // MARK: - Lifecycle
@@ -23,6 +24,7 @@ final class ProductDetailVC: UIViewController {
         viewModel.onSuccess = { [weak self] product in
             DispatchQueue.main.async {
                 self?.productHeroView.configure(with: product)
+                self?.descriptionView.configure(with: product.description)
             }
         }
     }
@@ -58,7 +60,7 @@ private extension ProductDetailVC {
     func setupConstraints() {
         view.addSubview(stackView)
         
-        stackView.addArrangedSubviews(productHeroView, addActionView)
+        stackView.addArrangedSubviews(productHeroView, addActionView, descriptionView)
         
         stackView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
