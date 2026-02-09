@@ -121,6 +121,6 @@ extension ProductsVC: UICollectionViewDelegateFlowLayout {
         let availableWidth = collectionView.bounds.width - totalSpacing
         let cellWidth = availableWidth / itemsPerRow
         
-        return CGSize(width: cellWidth, height: cellWidth + 20)
+        return CGSize(width: cellWidth, height: cellWidth + 40)
     }
 }

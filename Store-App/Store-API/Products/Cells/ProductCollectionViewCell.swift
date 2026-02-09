@@ -17,6 +17,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     private let image = UIImageView()
     private let titleLabel = UILabel()
     private let priceLabel = UILabel()
+    private let addActionView = AddActionView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,7 +47,7 @@ private extension ProductCollectionViewCell {
         stackView.axis = .vertical
         stackView.spacing = 4
         
-        stackView.addArrangedSubviews(imageView, titleLabel, priceLabel)
+        stackView.addArrangedSubviews(imageView, titleLabel, priceLabel, addActionView)
         
         stackView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -54,6 +55,23 @@ private extension ProductCollectionViewCell {
             make.bottom.equalToSuperview().inset(8)
         }
         
+        titleLabel.font = .systemFont(ofSize: 12)
+        titleLabel.textColor = .black
+        titleLabel.numberOfLines = 2
+        
+        priceLabel.font = .boldSystemFont(ofSize: 16)
+        priceLabel.numberOfLines = 1
+        
+        addActionView.snp.makeConstraints { make in
+            make.height.equalTo(24)
+        }
+        
+        addActionView.editButtonTitleSize(to: 12)
+        
+        setupImageView()
+    }
+    
+    func setupImageView() {
         imageView.addSubview(image)
         
         image.image = UIImage(named: "disk")
@@ -68,12 +86,5 @@ private extension ProductCollectionViewCell {
             make.bottom.equalToSuperview().inset(4)
             make.left.right.equalToSuperview().inset(24)
         }
-        
-        titleLabel.font = .systemFont(ofSize: 12)
-        titleLabel.textColor = .black
-        titleLabel.numberOfLines = 3
-        
-        priceLabel.font = .boldSystemFont(ofSize: 16)
-        priceLabel.numberOfLines = 1
     }
 }
