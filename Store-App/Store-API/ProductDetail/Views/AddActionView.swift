@@ -24,6 +24,10 @@ final class AddActionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func editButtonTitleSize(to size: CGFloat) {
+        addToCartButton.titleLabel?.font = .systemFont(ofSize: size)
+    }
+    
     //  MARK: - Actions
     private func addToCartButtonTapped() {
         addToCartButton.addAction { [weak self] in
