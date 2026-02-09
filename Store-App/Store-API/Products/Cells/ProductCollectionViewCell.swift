@@ -28,7 +28,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(to product: ProductResponse) {
+    func configure(to product: ProductResponse?) {
+        guard let product else { return }
         image.sd_setImage(with: URL(string: product.image))
         titleLabel.text = product.title
         priceLabel.text = product.priceFormatted()
