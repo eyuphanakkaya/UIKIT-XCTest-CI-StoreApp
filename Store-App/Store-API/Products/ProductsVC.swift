@@ -99,6 +99,12 @@ extension ProductsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ProductCollectionViewCell.identifier, for: indexPath) as! ProductCollectionViewCell
         let product = viewModel.products[indexPath.row]
         cell.configure(to: product)
+        
+        
+        cell.onAddToCartHandler = { [weak self] in
+            print(product.id)
+        }
+        
         return cell
     }
     

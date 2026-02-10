@@ -19,9 +19,13 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     private let priceLabel = UILabel()
     private let addActionView = AddActionView()
     
+    var onAddToCartHandler: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+        
+        addActionViewTapped()
     }
     
     required init?(coder: NSCoder) {
@@ -33,6 +37,14 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         image.sd_setImage(with: URL(string: product.image))
         titleLabel.text = product.title
         priceLabel.text = product.priceFormatted()
+    }
+    
+    
+    // MARK: - Actions
+    private func addActionViewTapped() {
+        addActionView.onAddToCart = { [weak self] in
+            self?.onAddToCartHandler?()
+        }
     }
 }
 

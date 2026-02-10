@@ -18,6 +18,8 @@ final class AddActionView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        
+        addToCartButtonTapped()
     }
     
     required init?(coder: NSCoder) {

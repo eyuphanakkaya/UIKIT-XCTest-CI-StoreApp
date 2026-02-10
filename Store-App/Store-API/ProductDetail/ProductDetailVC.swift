@@ -80,6 +80,10 @@ extension ProductDetailVC: UICollectionViewDataSource, UICollectionViewDelegate 
             let cell = collectionView.dequeueCell(cellClass: ProductCollectionViewCell.self, for: indexPath)
             let product = viewModel.products?[indexPath.item]
             cell.configure(to: product)
+            
+            cell.onAddToCartHandler = { [weak self] in
+                print("selam \(indexPath.row)")
+            }
             return cell
         default:
             return UICollectionViewCell()
