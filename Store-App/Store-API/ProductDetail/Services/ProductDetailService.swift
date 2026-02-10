@@ -21,26 +21,21 @@ final class ProductDetailService {
         case invalidData
     }
     
-    func load(completion: @escaping (Result<ProductResponse,Error>)-> Void) {
-        httpClient.get(url) { [weak self] result in
-            guard let self else {return}
-            
-            switch result {
-            case let .success((data, response)):
-                completion(map(data, response))
-                
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
+    func load() async throws -> ProductResponse{
+        do {
+            let (data,response) = try await httpClient.get(url)
+            let item = try map(data, response)
+            return item
+        } catch {
+            throw ProductDetailError.invalidData
         }
     }
     
-    private func map(_ data: Data,_ response: HTTPURLResponse)-> Result<ProductResponse,Error> {
+    private func map(_ data: Data,_ response: HTTPURLResponse) throws -> ProductResponse {
         do {
-            let item = try ProductDetailMapper().map(data: data, from: response)
-            return .success(item)
-        } catch let error {
-            return .failure(error)
+            return try ProductDetailMapper().map(data: data, from: response)
+        } catch {
+            throw ProductDetailError.invalidData
         }
     }
 }

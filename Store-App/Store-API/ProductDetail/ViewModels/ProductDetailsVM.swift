@@ -7,13 +7,22 @@
 
 import Foundation
 
+@MainActor
 final class ProductDetailsVM {
     private let detailService: ProductDetailService
     private let productsService: ProductsService
     
     var title: String
-    var productDetails: ProductResponse?
-    var products: [ProductResponse]?
+    var productDetails: ProductResponse? {
+        didSet {
+            onSuccess?()
+        }
+    }
+    var products: [ProductResponse]?{
+        didSet {
+            onSuccess?()
+        }
+    }
     
     var onSuccess: (() -> Void)?
     
@@ -29,28 +38,22 @@ final class ProductDetailsVM {
     }
     
     private func detailLoad() {
-        detailService.load { [weak self] result in
-            guard let self else {return}
-
-            switch result {
-            case let .success(item):
-                onSuccess?()
-                productDetails = item
-            case let .failure(error):
+        Task {
+            do {
+                let result = try await detailService.load()
+                productDetails = result
+            } catch {
                 print(error)
             }
         }
     }
     
     private func productsLoad() {
-        productsService.load { [weak self] result in
-            guard let self else {return}
-            
-            switch result {
-            case let .success(items):
-                onSuccess?()
-                products = items
-            case let .failure(error):
+        Task {
+            do {
+                let result = try await productsService.load()
+                products = result
+            } catch {
                 print(error)
             }
         }

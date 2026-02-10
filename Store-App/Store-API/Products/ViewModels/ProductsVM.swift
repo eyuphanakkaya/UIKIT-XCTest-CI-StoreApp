@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+@MainActor
 final class ProductsVM {
     private let service: ProductsService
     var products: [ProductResponse] = []
@@ -24,13 +24,13 @@ final class ProductsVM {
     }
     
     private func load() {
-        service.load { [weak self] result in
-            switch result {
-            case .success(let response):
-                self?.products = response
-                self?.onSuccess?()
-            case .failure(let error):
-                self?.onFailure?(error)
+        Task {
+            do {
+                let result = try await service.load()
+                products = result
+                onSuccess?()
+            } catch {
+                onFailure?(error)
             }
         }
     }

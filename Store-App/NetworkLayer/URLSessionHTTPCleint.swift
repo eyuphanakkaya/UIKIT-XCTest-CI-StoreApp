@@ -15,13 +15,14 @@ final class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
     
-    func get(_ url: URL, completion: @escaping (Result<(Data,HTTPURLResponse),Error>)-> Void) {
-        session.dataTask(with: url) { data, response, error in
-            if let data = data, let response = response as? HTTPURLResponse {
-                completion(.success((data,response)))
-            } else if let error = error {
-                completion(.failure(error))
-            }
-        }.resume()
+    func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
+        let (data, response) = try await session.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        return (data, httpResponse)
     }
+    
 }

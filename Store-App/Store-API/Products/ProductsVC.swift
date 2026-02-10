@@ -34,9 +34,7 @@ final class ProductsVC: UIViewController {
         viewModel.viewWillAppear()
         
         viewModel.onSuccess = { [weak self] in
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
+            self?.collectionView.reloadData()
         }
         
         viewModel.onFailure = {  error in

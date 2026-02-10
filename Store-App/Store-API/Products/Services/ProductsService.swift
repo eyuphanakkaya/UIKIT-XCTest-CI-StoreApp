@@ -23,24 +23,18 @@ final class ProductsService {
     }
     
     
-    func load(completion: @escaping(Result<[ProductResponse],Error>)-> Void) {
-        client.get(url) { [weak self] result in
-            guard let self else {return}
-            switch result {
-            case let .success(( data, response)):
-                completion(map(data, from: response))
-            case let .failure(error):
-                print(error.localizedDescription)
-            }
-        }
+    func load() async throws -> [ProductResponse]  {
+        let (data, response) = try await client.get(url)
+        let result = try map(data, from: response)
+        return result
     }
     
-    private func map(_ data: Data, from response: HTTPURLResponse) -> Result<[ProductResponse],Error>{
+    private func map(_ data: Data, from response: HTTPURLResponse) throws -> [ProductResponse] {
         do {
             let item = try ProductMapper().map(data: data, from: response)
-            return .success(item)
-        } catch let error {
-            return .failure(error)
+            return item
+        } catch {
+            throw ProductsServiceError.invalidData
         }
     }
 }
