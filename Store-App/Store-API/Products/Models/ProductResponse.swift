@@ -16,6 +16,10 @@ struct ProductResponse {
     let image: String
     
     var isAdded: Bool
+    
+    var convertToIdString : String {
+        return "\(id)"
+    }
 }
 
 extension ProductResponse {
