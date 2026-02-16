@@ -14,7 +14,7 @@ struct ProductMapper {
             throw ProductsService.ProductsServiceError.invalidData
         }
         
-        return root.map { $0.toDomain() }
+        return root.map{$0.toDomain()}
         
     }
 }
