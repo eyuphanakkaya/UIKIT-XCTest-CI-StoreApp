@@ -16,7 +16,9 @@ final class ProductDetailFactory {
         
         let detailService = ProductDetailService(httpClient: httpClient, url: detailUrl)
         let productsService = ProductsService(client: httpClient, url: productsUrl)
-        let viewModel = ProductDetailsVM(detailService: detailService, productsService: productsService, title: title)
+        let storage = UserDefaultManager()
+        
+        let viewModel = ProductDetailsVM(detailService: detailService, productsService: productsService, title: title, storage: storage)
         let viewController = ProductDetailVC(viewModel: viewModel)
         return viewController
     }

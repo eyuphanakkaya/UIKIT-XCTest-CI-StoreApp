@@ -11,6 +11,7 @@ import Foundation
 final class ProductDetailsVM {
     private let detailService: ProductDetailService
     private let productsService: ProductsService
+    private let storage: StoreStorage
     
     var title: String
     var productDetails: ProductResponse? {
@@ -26,9 +27,14 @@ final class ProductDetailsVM {
     
     var onSuccess: (() -> Void)?
     
-    init(detailService: ProductDetailService, productsService: ProductsService, title: String) {
+    init(detailService: ProductDetailService,
+         productsService: ProductsService,
+         title: String,
+         storage: StoreStorage) {
+        
         self.detailService = detailService
         self.productsService = productsService
+        self.storage = storage
         self.title = title
     }
     
@@ -53,6 +59,7 @@ final class ProductDetailsVM {
             do {
                 let result = try await productsService.load()
                 products = result
+                syncCartState()
             } catch {
                 print(error)
             }
@@ -61,9 +68,35 @@ final class ProductDetailsVM {
     
 }
 extension ProductDetailsVM {
-    func toggleAddToCart(productID: Int?) {
-        guard let productID  else {return}
-        guard let index = products?.firstIndex(where: { $0.id == productID }) else { return }
+    func toggleAddToCart(productID: String?) {
+        guard let productID else { return }
+        guard let index = products?.firstIndex(where: { $0.convertToIdString == productID }) else { return }
         products?[index].isAdded.toggle()
+        cartItemChange(productID)
+    }
+    
+    private func cartItemChange(_ productID: String) {
+        let isAdded = isProductInCart(productID)
+        
+        if isAdded {
+            storage.delete(productID)
+        } else {
+            storage.insert(productID)
+        }
+    }
+    
+    private func isProductInCart(_ id: String) -> Bool {
+        return storage.retrieve().contains(id)
+    }
+    
+    private func syncCartState() {
+        guard products != nil else { return }
+        
+        let cartIDs = storage.retrieve()
+        
+        for index in products!.indices {
+            let id = products![index].convertToIdString
+            products![index].isAdded = cartIDs.contains(id)
+        }
     }
 }
