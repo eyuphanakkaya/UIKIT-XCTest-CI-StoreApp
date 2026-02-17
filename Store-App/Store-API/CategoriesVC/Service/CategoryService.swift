@@ -7,11 +7,11 @@
 
 import Foundation
 
-final class CategoryService {
+final public class CategoryService {
     private let client: HTTPClient
     private let url: URL
     
-    init(client: HTTPClient, url: URL) {
+    public init(client: HTTPClient, url: URL) {
         self.client = client
         self.url = url
     }
@@ -21,7 +21,7 @@ final class CategoryService {
         case invalidData
     }
     
-    func load() async throws -> [String] {
+    public func load() async throws -> [String] {
         let (data, response) = try await client.get(url)
         return try map(data, from: response)
     }
