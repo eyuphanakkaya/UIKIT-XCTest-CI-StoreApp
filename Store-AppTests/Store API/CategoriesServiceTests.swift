@@ -19,6 +19,15 @@ final class CategoriesServiceTests: XCTestCase {
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
+    
+    func test_load_requestDataFromURL() async throws {
+        let (sut, client) = makeSUT()
+        
+        _ = try? await sut.load()
+        
+        XCTAssertNotNil(client.requestedURLs)
+    }
+    
     // MARK: - Helpers
     private func makeSUT(url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
         let client = HTTPClientSpy()
