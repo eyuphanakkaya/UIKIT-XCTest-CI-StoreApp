@@ -11,8 +11,8 @@ import UIKit
 final class ProductDetailFactory {
     func makeViewController(id: Int, title: String) -> UIViewController {
         let httpClient = URLSessionHTTPClient()
-        let detailUrl = URL(string: APIConstants.baseURL + "products/\(id)")!
-        let productsUrl = URL(string: APIConstants.baseURL + "products")!
+        let detailUrl = URL(string: APIConstants.baseURL + "\(id)")!
+        let productsUrl = URL(string: APIConstants.baseURL)!
         
         let detailService = ProductDetailService(httpClient: httpClient, url: detailUrl)
         let productsService = ProductsService(client: httpClient, url: productsUrl)

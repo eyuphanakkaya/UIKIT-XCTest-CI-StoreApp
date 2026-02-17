@@ -21,10 +21,10 @@ final class ProductsVC: UIViewController {
     }()
     
     private let viewModel: ProductsVM!
+    private let headerTitle: String
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.viewDidLoad()
 
         setupCollectionView()
         setupUI()
@@ -33,6 +33,8 @@ final class ProductsVC: UIViewController {
     // MARK: - Lifecycles
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.viewViewWillAppear()
+
         
         viewModel.onSuccess = { [weak self] in
             self?.collectionView.reloadData()
@@ -44,8 +46,9 @@ final class ProductsVC: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ProductsVM) {
+    init(viewModel: ProductsVM,headerTitle: String) {
         self.viewModel = viewModel
+        self.headerTitle = headerTitle
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -82,7 +85,7 @@ final class ProductsVC: UIViewController {
 private extension ProductsVC {
     func setupUI() {
         view.backgroundColor = .white
-        title = "Products"
+        title = headerTitle
     }
     
     func setupConstraints() {

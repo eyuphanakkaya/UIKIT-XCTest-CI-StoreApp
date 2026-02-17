@@ -74,6 +74,11 @@ extension ProductDetailVC: UICollectionViewDataSource, UICollectionViewDelegate 
             let cell = collectionView.dequeueCell(cellClass: ProductHeroCell.self, for: indexPath)
             
             if let product = viewModel.productDetails { cell.configure(with: product) }
+            
+            cell.addActionButtonHandler = { [weak self] in
+                self?.viewModel.toggleAddToCart(productID: self?.viewModel.productDetails?.convertToIdString)
+            }
+            
             return cell
             
         case 1:

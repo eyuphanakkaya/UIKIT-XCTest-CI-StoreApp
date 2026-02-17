@@ -21,7 +21,7 @@ final class ProductsVM {
         self.storage = storage
     }
     
-    func viewDidLoad() {
+    func viewViewWillAppear() {
         load()
     }
 }

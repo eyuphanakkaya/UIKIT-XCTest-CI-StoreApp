@@ -48,6 +48,7 @@ final class ProductDetailsVM {
             do {
                 let result = try await detailService.load()
                 productDetails = result
+                syncCartState()
             } catch {
                 print(error)
             }
@@ -70,9 +71,21 @@ final class ProductDetailsVM {
 extension ProductDetailsVM {
     func toggleAddToCart(productID: String?) {
         guard let productID else { return }
-        guard let index = products?.firstIndex(where: { $0.convertToIdString == productID }) else { return }
-        products?[index].isAdded.toggle()
         cartItemChange(productID)
+        
+        let isAdded = isProductInCart(productID)
+        
+        updateLocalState(productID: productID, isAdded: isAdded)
+    }
+    
+    private func updateLocalState(productID: String, isAdded: Bool) {
+        if let index = products?.firstIndex(where: { $0.convertToIdString == productID }) {
+            products?[index].isAdded = isAdded
+        }
+        
+        if productDetails?.convertToIdString == productID {
+            productDetails?.isAdded = isAdded
+        }
     }
     
     private func cartItemChange(_ productID: String) {
@@ -97,6 +110,10 @@ extension ProductDetailsVM {
         for index in products!.indices {
             let id = products![index].convertToIdString
             products![index].isAdded = cartIDs.contains(id)
+        }
+        
+        if let detailID = productDetails?.convertToIdString {
+            productDetails?.isAdded = cartIDs.contains(detailID)
         }
     }
 }
