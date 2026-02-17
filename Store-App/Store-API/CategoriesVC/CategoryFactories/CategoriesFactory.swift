@@ -11,7 +11,14 @@ import UIKit
 
 final class CategoriesFactory {
     func makeViewController() -> UIViewController {
-        let viewController = CategoriesVC()
+        let client = URLSessionHTTPClient()
+        let url = URL(string: APIConstants.baseURL + "categories")!
+        
+        let service = CategoryService(client: client, url: url)
+        
+        let viewModel = CategoryVM(service: service)
+        
+        let viewController = CategoriesVC(viewModel: viewModel)
         return viewController
     }
 }
