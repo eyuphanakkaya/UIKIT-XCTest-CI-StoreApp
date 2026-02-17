@@ -10,12 +10,20 @@ import SnapKit
 
 final class CategoriesVC: UIViewController {
 
+    // MARK: - Components
     private let tableView = UITableView()
+    private let viewModel: CategoryVM
     
+    // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.viewDidLoad()
 
         navigationItem.title = "Categories"
+        
+        viewModel.onSuccess = { [weak self] in
+            self?.tableView.reloadData()
+        }
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -24,6 +32,17 @@ final class CategoriesVC: UIViewController {
         setupTableView()
     }
     
+    // MARK: - Initializer
+    init(viewModel: CategoryVM) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - UI Helper
     private func setupTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -31,6 +50,7 @@ final class CategoriesVC: UIViewController {
         }
     }
     
+    // MARK: - Navigator
     private func showToProductVC() {
         let vc = ProductFactory().makeViewController()
         navigationController?.pushViewController(vc, animated: true)
@@ -39,12 +59,13 @@ final class CategoriesVC: UIViewController {
 }
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Category \(indexPath.row)"
+        let category = viewModel.categories[indexPath.row]
+        cell.textLabel?.text = category
         return cell
     }
     
