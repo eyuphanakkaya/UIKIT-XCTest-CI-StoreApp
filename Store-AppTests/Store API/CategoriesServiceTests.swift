@@ -20,7 +20,7 @@ final class CategoriesServiceTests: XCTestCase {
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
-    func test_load_requestDataFromURL() async throws {
+    func test_load_requestsDataFromURL() async throws {
         let (sut, client) = makeSUT()
         
         _ = try? await sut.load()
