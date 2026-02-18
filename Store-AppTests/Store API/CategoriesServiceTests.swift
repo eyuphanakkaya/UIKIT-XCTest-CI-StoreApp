@@ -67,6 +67,17 @@ final class CategoriesServiceTests: XCTestCase {
         await expect(sut, toCompleteWithError: .invalidData)
     }
     
+    func test_load_deliversNoItemsOn200HTTPResponseWithEmptyJsonList() async {
+        let (sut, _) = makeSUT(result: .success(emptyListResponse()))
+        
+        do {
+            let result = try await sut.load()
+            XCTAssertTrue(result.isEmpty)
+        } catch {
+            XCTFail("Expected empty but got: \(error)")
+        }
+    }
+    
     // MARK: - Helpers
     private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>,url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
@@ -106,6 +117,11 @@ final class CategoriesServiceTests: XCTestCase {
     
     private func anyError() -> Error {
         AnyError()
+    }
+    
+    private func emptyListResponse() -> (Data, HTTPURLResponse) {
+        let emptyListJSON = "[]".data(using: .utf8)!
+        return (emptyListJSON, anyHttpResponse(statusCode: 200))
     }
     
     private func anyValidResponse() -> (Data, HTTPURLResponse) {
