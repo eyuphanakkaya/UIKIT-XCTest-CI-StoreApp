@@ -25,6 +25,8 @@ final public class CategoryService {
         do {
             let (data, response) = try await client.get(url)
             return try map(data, from: response)
+        } catch let error as CategoryServiceError {
+            throw error
         } catch {
             throw CategoryServiceError.connectivity
         }
@@ -35,7 +37,7 @@ final public class CategoryService {
             let item = try  CategoryMapper().map(data: data, from: response)
             return item
         } catch {
-            throw CategoryServiceError.connectivity
+            throw CategoryServiceError.invalidData
         }
     }
     

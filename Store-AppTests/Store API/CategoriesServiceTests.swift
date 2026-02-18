@@ -53,6 +53,18 @@ final class CategoriesServiceTests: XCTestCase {
         }
     }
     
+    func test_load_deliversErrorOnNon200HTTPResponse() async throws {
+        let non200Response = (Data(),anyHttpResponse(statusCode: 400))
+        let (sut, _) = makeSUT(result: .success((non200Response)))
+    
+        do {
+            _ = try await sut.load()
+            XCTFail("Expected error: \(CategoryService.CategoryServiceError.invalidData)")
+        } catch {
+            XCTAssertEqual(error as? CategoryService.CategoryServiceError, .invalidData)
+        }
+    }
+    
     // MARK: - Helpers
     private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>,url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
