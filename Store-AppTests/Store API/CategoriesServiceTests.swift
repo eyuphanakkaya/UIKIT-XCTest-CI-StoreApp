@@ -44,13 +44,8 @@ final class CategoriesServiceTests: XCTestCase {
     // when client catched error we should taken error either
     func test_load_deliversErrorOnClientError() async throws {
         let (sut, _) = makeSUT(result: .failure(anyError()))
-    
-        do {
-            _ = try await sut.load()
-            XCTFail("Expected error: \(CategoryService.CategoryServiceError.connectivity)")
-        } catch {
-            XCTAssertEqual(error as? CategoryService.CategoryServiceError, .connectivity)
-        }
+        
+        await expect(sut, toCompleteWithError: .connectivity)
     }
     
 
@@ -60,12 +55,7 @@ final class CategoriesServiceTests: XCTestCase {
             let non200Response = (Data(),anyHttpResponse(statusCode: code))
             let (sut, _) = makeSUT(result: .success((non200Response)))
             
-            do {
-                _ = try await sut.load()
-                XCTFail("Expected error: \(CategoryService.CategoryServiceError.invalidData)")
-            } catch {
-                XCTAssertEqual(error as? CategoryService.CategoryServiceError, .invalidData)
-            }
+            await expect(sut, toCompleteWithError: .invalidData)
         }
     }
     
@@ -74,12 +64,7 @@ final class CategoriesServiceTests: XCTestCase {
         let non200Response = (invalidJson,anyHttpResponse(statusCode: 200))
         let (sut, _) = makeSUT(result: .success((non200Response)))
         
-        do {
-            _ = try await sut.load()
-            XCTFail("Expected error: \(CategoryService.CategoryServiceError.invalidData)")
-        } catch {
-            XCTAssertEqual(error as? CategoryService.CategoryServiceError, .invalidData)
-        }
+        await expect(sut, toCompleteWithError: .invalidData)
     }
     
     // MARK: - Helpers
@@ -105,6 +90,15 @@ final class CategoriesServiceTests: XCTestCase {
         func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
             messages.append(url)
             return try result.get()
+        }
+    }
+    
+    private func expect(_ sut: CategoryService,toCompleteWithError errors: CategoryService.CategoryServiceError, file: StaticString = #file, line: UInt = #line) async {
+        do {
+            _ = try await sut.load()
+            XCTFail("Expected error: \(errors)")
+        } catch {
+            XCTAssertEqual(error as? CategoryService.CategoryServiceError, errors, file: file, line: line)
         }
     }
     
