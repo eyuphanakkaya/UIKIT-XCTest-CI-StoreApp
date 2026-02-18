@@ -28,6 +28,16 @@ final class CategoriesServiceTests: XCTestCase {
         XCTAssertNotNil(client.requestedURLs)
     }
     
+    func test_loadTwice_requestsDataFromURLTwice() async throws {
+        let url = URL(string: "https://a-url.com")!
+        let (sut, client) = makeSUT(url: url)
+        
+        _ = try? await sut.load()
+        _ = try? await sut.load()
+        
+        XCTAssertEqual(client.requestedURLs, [url, url], "expected to make 2 requests")
+    }
+    
     // MARK: - Helpers
     private func makeSUT(url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
         let client = HTTPClientSpy()
