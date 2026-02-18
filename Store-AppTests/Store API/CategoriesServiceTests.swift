@@ -21,11 +21,12 @@ final class CategoriesServiceTests: XCTestCase {
     }
     
     func test_load_requestsDataFromURL() async throws {
-        let (sut, client) = makeSUT()
+        let url = URL(string: "https://a-url.com")!
+        let (sut, client) = makeSUT(url: url)
         
         _ = try? await sut.load()
         
-        XCTAssertNotNil(client.requestedURLs)
+        XCTAssertEqual(client.requestedURLs, [url])
     }
     
     func test_loadTwice_requestsDataFromURLTwice() async throws {
