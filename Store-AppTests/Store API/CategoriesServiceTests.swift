@@ -13,25 +13,27 @@ import Store_App
 final class CategoriesServiceTests: XCTestCase {
     
     func test_init_doesNotRequestDataFromURL() async throws {
-        let (_ , client) = makeSUT()
+        let (_ , client) = makeSUT(result: .success(anyValidResponse()))
         
         try await Task.sleep(nanoseconds: 50_000_000)
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
     
+    // We are just checking load method into Service layer
     func test_load_requestsDataFromURL() async throws {
         let url = URL(string: "https://a-url.com")!
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT(result: .success(anyValidResponse()), url: url)
         
         _ = try? await sut.load()
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
+    // If we have called 2 time load in Service layer we should have an error .
     func test_loadTwice_requestsDataFromURLTwice() async throws {
         let url = URL(string: "https://a-url.com")!
-        let (sut, client) = makeSUT(url: url)
+        let (sut, client) = makeSUT(result: .success(anyValidResponse()), url: url)
         
         _ = try? await sut.load()
         _ = try? await sut.load()
@@ -39,9 +41,21 @@ final class CategoriesServiceTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [url, url], "expected to make 2 requests")
     }
     
+    // when client catched error we should taken error either
+    func test_load_deliversErrorOnClientError() async throws {
+        let (sut, _) = makeSUT(result: .failure(anyError()))
+    
+        do {
+            _ = try await sut.load()
+            XCTFail("Expected error: \(CategoryService.CategoryServiceError.connectivity)")
+        } catch {
+            XCTAssertEqual(error as? CategoryService.CategoryServiceError, .connectivity)
+        }
+    }
+    
     // MARK: - Helpers
-    private func makeSUT(url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
-        let client = HTTPClientSpy()
+    private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>,url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
+        let client = HTTPClientSpy(result: result)
         let sut = CategoryService(client: client, url: url)
         
         return (sut,client)
@@ -49,15 +63,35 @@ final class CategoriesServiceTests: XCTestCase {
     
     private class HTTPClientSpy: HTTPClient {
         private var messages = [URL]()
+        private let result: Result<(Data, HTTPURLResponse), Error>
+        
         var requestedURLs: [URL] {
             messages
         }
         
+        init(result: Result<(Data, HTTPURLResponse), Error>) {
+            self.result = result
+        }
+        
         func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
             messages.append(url)
-            
-            return (Data(), HTTPURLResponse())
+            return try result.get()
         }
+    }
+    
+    private struct AnyError: Error {}
+    
+    private func anyError() -> Error {
+        AnyError()
+    }
+    
+    private func anyValidResponse() -> (Data, HTTPURLResponse) {
+        return (Data(), anyHttpResponse(statusCode: 200))
+    }
+    
+    private func anyHttpResponse(statusCode: Int) -> HTTPURLResponse {
+        let url = URL(string: "https://example.com")!
+        return HTTPURLResponse(url:  url, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
     }
     
 

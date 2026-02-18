@@ -22,8 +22,12 @@ final public class CategoryService {
     }
     
     public func load() async throws -> [String] {
-        let (data, response) = try await client.get(url)
-        return try map(data, from: response)
+        do {
+            let (data, response) = try await client.get(url)
+            return try map(data, from: response)
+        } catch {
+            throw CategoryServiceError.connectivity
+        }
     }
     
     private func map(_ data: Data, from response: HTTPURLResponse) throws -> [String] {
@@ -31,8 +35,8 @@ final public class CategoryService {
             let item = try  CategoryMapper().map(data: data, from: response)
             return item
         } catch {
-            throw CategoryServiceError.invalidData
+            throw CategoryServiceError.connectivity
         }
     }
-
+    
 }
