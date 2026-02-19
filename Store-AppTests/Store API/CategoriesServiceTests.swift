@@ -50,7 +50,7 @@ final class CategoriesServiceTests: XCTestCase {
     func test_load_deliversErrorOnNon200HTTPResponse() async {
         let samples = [199,201,300,400,500]
         for code in samples {
-            let non200Response = (Data(),anyHttpResponse(statusCode: code))
+            let non200Response = (makeItemJson([]),anyHttpResponse(statusCode: code))
             let (sut, _) = makeSUT(result: .success((non200Response)))
             
             await expect(sut, toCompleteWithError: .invalidData)
