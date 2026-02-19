@@ -92,9 +92,11 @@ final class CategoriesServiceTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>,url: URL = URL(string: "https://example.com")!) -> (CategoryService, HTTPClientSpy) {
+    private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>,url: URL = URL(string: "https://example.com")!, file: StaticString = #filePath, line: UInt = #line) -> (CategoryService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
         let sut = CategoryService(client: client, url: url)
+        
+        trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut,client)
     }
