@@ -22,13 +22,10 @@ final public class CategoryService {
     }
     
     public func load() async throws -> [String] {
-        let (data, response): (Data, HTTPURLResponse)
-
-        do {
-            (data, response) = try await client.get(url)
-        } catch {
+        guard let (data, response) = try? await client.get(url) else {
             throw CategoryServiceError.connectivity
         }
+        
         return try map(data, from: response)
     }
     
