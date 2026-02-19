@@ -21,9 +21,9 @@ final class CategoriesServiceTests: XCTestCase {
     // We are just checking load method into Service layer
     func test_load_requestsDataFromURL() async throws {
         let url = URL(string: "https://a-url.com")!
-        let (sut, client) = makeSUT(result: .success(anyValidResponse()), url: url)
+        let (sut, client) = makeSUT(result: .success(emptyListResponse()), url: url)
         
-        _ = try? await sut.load()
+        _ = try await sut.load()
         
         XCTAssertEqual(client.requestedURLs, [url])
     }
@@ -31,10 +31,10 @@ final class CategoriesServiceTests: XCTestCase {
     // If we have called 2 time load in Service layer we should have an error .
     func test_loadTwice_requestsDataFromURLTwice() async throws {
         let url = URL(string: "https://a-url.com")!
-        let (sut, client) = makeSUT(result: .success(anyValidResponse()), url: url)
+        let (sut, client) = makeSUT(result: .success(emptyListResponse()), url: url)
         
-        _ = try? await sut.load()
-        _ = try? await sut.load()
+        _ = try await sut.load()
+        _ = try await sut.load()
         
         XCTAssertEqual(client.requestedURLs, [url, url], "expected to make 2 requests")
     }
