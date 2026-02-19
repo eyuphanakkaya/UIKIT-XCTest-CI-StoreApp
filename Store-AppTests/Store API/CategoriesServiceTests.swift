@@ -12,10 +12,8 @@ import Store_App
 
 final class CategoriesServiceTests: XCTestCase {
     
-    func test_init_doesNotRequestDataFromURL() async throws {
+    func test_init_doesNotRequestDataFromURL() async {
         let (_ , client) = makeSUT(result: .success(anyValidResponse()))
-        
-        try await Task.sleep(nanoseconds: 50_000_000)
         
         XCTAssertTrue(client.requestedURLs.isEmpty)
     }
@@ -42,14 +40,14 @@ final class CategoriesServiceTests: XCTestCase {
     }
     
     // when client catched error we should taken error either
-    func test_load_deliversErrorOnClientError() async throws {
+    func test_load_deliversErrorOnClientError() async {
         let (sut, _) = makeSUT(result: .failure(anyError()))
         
         await expect(sut, toCompleteWithError: .connectivity)
     }
     
 
-    func test_load_deliversErrorOnNon200HTTPResponse() async throws {
+    func test_load_deliversErrorOnNon200HTTPResponse() async {
         let samples = [199,201,300,400,500]
         for code in samples {
             let non200Response = (Data(),anyHttpResponse(statusCode: code))
@@ -59,7 +57,7 @@ final class CategoriesServiceTests: XCTestCase {
         }
     }
     
-    func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() async throws {
+    func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
         let invalidJson = Data("invalid json".utf8)
         let on200Response = (invalidJson,anyHttpResponse(statusCode: 200))
         let (sut, _) = makeSUT(result: .success((on200Response)))
@@ -78,7 +76,7 @@ final class CategoriesServiceTests: XCTestCase {
         }
     }
     
-    func test_load_deliversItemsOn200HTTPResponseWithJsonItems() async throws {
+    func test_load_deliversItemsOn200HTTPResponseWithJsonItems() async {
         let item1 = makeCategory("electronics")
         let item2 = makeCategory("jewelery")
         let validJson = makeItemJson([item1.json, item2.json])
