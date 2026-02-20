@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ProductsService {
+final public class ProductsService {
     private let client: HTTPClient
     private let url: URL
     
@@ -17,7 +17,7 @@ final class ProductsService {
         case invalidData
     }
     
-    init(client: HTTPClient, url: URL) {
+    public init(client: HTTPClient, url: URL) {
         self.client = client
         self.url = url
     }
