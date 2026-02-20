@@ -41,6 +41,8 @@ final class ProductsServiceTests: XCTestCase {
         let client = HTTPClientSpy(result: result)
         let sut = ProductsService(client: client, url: url)
         
+        trackForMemoryLeaks(sut)
+        
         return (sut, client)
     }
     
