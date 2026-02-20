@@ -24,6 +24,16 @@ final class ProductsServiceTests: XCTestCase {
         XCTAssertNotNil(client.requestedURLs)
     }
     
+    func test_loadTwice_requestsDataFromURL() async throws {
+        let url = URL(string: "https://example.com")!
+        let (sut, client) = makeSUT(.success(emptyListResponse()), url: url)
+        
+        _ = try await sut.load()
+        _ = try await sut.load()
+        
+        XCTAssertEqual(client.requestedURLs, [url, url])
+    }
+    
     
     // MARK: - Helpers
     
