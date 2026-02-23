@@ -8,11 +8,11 @@
 import Foundation
 
 
-final class ProductDetailService: StoreLoader {
+final public class ProductDetailService: StoreLoader {
     private let httpClient: HTTPClient
     private let url: URL
     
-    init(httpClient: HTTPClient, url: URL, ) {
+    public init(httpClient: HTTPClient, url: URL, ) {
         self.httpClient = httpClient
         self.url = url
     }
@@ -21,7 +21,7 @@ final class ProductDetailService: StoreLoader {
         case invalidData
     }
     
-    func load() async throws -> ProductResponse{
+    public func load() async throws -> ProductResponse{
         do {
             let (data,response) = try await httpClient.get(url)
             let item = try map(data, response)
