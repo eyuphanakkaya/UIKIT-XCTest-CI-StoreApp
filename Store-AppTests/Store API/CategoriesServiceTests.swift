@@ -128,32 +128,18 @@ final class CategoriesServiceTests: XCTestCase {
         }
     }
     
-    private struct AnyError: Error {}
-    
-    private func anyError() -> Error {
-        AnyError()
-    }
-    
     private func makeCategory(_ name: String) -> (model: String, json: String) {
         return (name, name)
     }
     
-    private func emptyListResponse() -> (Data, HTTPURLResponse) {
-        let emptyListJSON = "[]".data(using: .utf8)!
-        return (emptyListJSON, anyHttpResponse(statusCode: 200))
-    }
-    
-    private func anyValidResponse() -> (Data, HTTPURLResponse) {
-        return (Data(), anyHttpResponse(statusCode: 200))
-    }
-    
-    private func anyHttpResponse(statusCode: Int) -> HTTPURLResponse {
-        let url = URL(string: "https://example.com")!
-        return HTTPURLResponse(url:  url, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
-    }
-    
     private func makeItemJson(_ items: [String]) -> Data {
         try! JSONSerialization.data(withJSONObject: items)
+    }
+    
+    private struct AnyError: Error {}
+    
+    private func anyError() -> Error {
+        AnyError()
     }
     
 

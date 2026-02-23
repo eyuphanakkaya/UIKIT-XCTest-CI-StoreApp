@@ -142,20 +142,4 @@ final class ProductsServiceTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: products)
     }
     
-    private func emptyListResponse() -> (Data, HTTPURLResponse) {
-        let emptyListJSON = "[]".data(using: .utf8)!
-        return (emptyListJSON, anyHttpResponse(statusCode: 200))
-    }
-    
-    private func anyValidResponse() -> (Data, HTTPURLResponse) {
-        let data = Data()
-        let response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-        return (data, response)
-    }
-    
-    private func anyHttpResponse(statusCode: Int) -> HTTPURLResponse {
-        let url = URL(string: "https://example.com")!
-        return HTTPURLResponse(url:  url, statusCode: statusCode, httpVersion: nil, headerFields: nil)!
-    }
-    
 }
