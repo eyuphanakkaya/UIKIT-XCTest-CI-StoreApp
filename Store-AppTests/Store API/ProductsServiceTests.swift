@@ -38,12 +38,7 @@ final class ProductsServiceTests: XCTestCase {
         let error = NSError(domain: "Test", code: 0)
         let (sut, _) = makeSUT(.failure(error))
         
-        do {
-            _ = try await sut.load()
-            XCTFail("Expected error: \(error)")
-        } catch {
-            XCTAssertEqual(error as? ProductsService.ProductsServiceError, .connectivity)
-        }
+        await expect(sut: sut, toCompleteWithError: .connectivity)
     }
     
     func test_load_deliversErrorOnNon200HTTPResponse() async {
@@ -53,12 +48,7 @@ final class ProductsServiceTests: XCTestCase {
             let data = Data()
             let (sut, _) = makeSUT(.success((data, anyHttpResponse(statusCode: code))))
             
-            do {
-                let result = try await sut.load()
-                XCTFail("Expected error instead of \(result) ")
-            } catch {
-                XCTAssertEqual(error as? ProductsService.ProductsServiceError, .invalidData)
-            }
+            await expect(sut: sut, toCompleteWithError: .invalidData)
         }
     }
     
@@ -67,12 +57,7 @@ final class ProductsServiceTests: XCTestCase {
         let response = anyHttpResponse(statusCode: 200)
         let (sut, _) = makeSUT(.success((data, response)))
         
-        do {
-            let result = try await sut.load()
-            XCTFail("Expected error instead of \(result) ")
-        } catch {
-            XCTAssertEqual(error as? ProductsService.ProductsServiceError, .invalidData)
-        }
+        await expect(sut: sut, toCompleteWithError: .invalidData)
     }
     
     func test_load_deliversOn200HTTPEmptyResponse() async {
@@ -109,6 +94,15 @@ final class ProductsServiceTests: XCTestCase {
         func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
             requestedURLs.append(url)
             return try result.get()
+        }
+    }
+    
+    private func expect(sut: ProductsService, toCompleteWithError errors: ProductsService.ProductsServiceError, file: StaticString = #file, line: UInt = #line) async {
+        do {
+            let result = try await sut.load()
+            XCTFail("Expected error instead of \(result)", file: file, line: line)
+        } catch {
+            XCTAssertEqual(error as? ProductsService.ProductsServiceError, errors, file: file, line: line)
         }
     }
     
