@@ -81,6 +81,9 @@ final class ProductDetailServiceTests: XCTestCase {
     private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>, url: URL = .init(string: "https://example.com")!) -> (ProductDetailService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
         let sut = ProductDetailService(client: client, url: url)
+        
+        trackForMemoryLeaks(sut)
+        
         return (sut, client)
     }
     
