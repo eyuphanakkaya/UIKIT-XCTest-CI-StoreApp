@@ -49,6 +49,22 @@ final class ProductDetailServiceTests: XCTestCase {
         }
     }
     
+    func test_load_deliverErrorOnNon200HTTPResponse() async {
+        let samples = [199,201,300,400,500]
+
+        for code in samples {
+            let data = Data()
+            let response = anyHttpResponse(statusCode: code)
+            let (sut, _) = makeSUT(result: .success((data, response)))
+            
+            do {
+                let result = try await sut.load()
+                XCTFail("Expected error, got \(result)")
+            } catch {
+                XCTAssertEqual(error as? ProductDetailService.ProductDetailError, .invalidData)
+            }
+        }
+    }
     
     
     // MARK: - Helpers
