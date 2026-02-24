@@ -53,9 +53,7 @@ final class ProductsServiceTests: XCTestCase {
     }
     
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
-        let data = Data("invalid data".utf8)
-        let response = anyHttpResponse(statusCode: 200)
-        let (sut, _) = makeSUT(.success((data, response)))
+        let (sut, _) = makeSUT(.success(makeInvalidJsonResponse()))
         
         await expect(sut: sut, toCompleteWithError: .invalidData)
     }

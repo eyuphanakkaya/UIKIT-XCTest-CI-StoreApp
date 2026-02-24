@@ -21,3 +21,8 @@ func anyHttpResponse(statusCode: Int) -> HTTPURLResponse {
 func anyValidResponse() -> (Data, HTTPURLResponse) {
     return (Data(), anyHttpResponse(statusCode: 200))
 }
+
+func makeInvalidJsonResponse() -> (Data, HTTPURLResponse) {
+    let invalidJSON = "invalid json".data(using: .utf8)!
+    return (invalidJSON, anyHttpResponse(statusCode: 200))
+}
