@@ -27,6 +27,16 @@ final class ProductDetailServiceTests: XCTestCase {
         XCTAssertEqual(client.requestedURLs, [url])
     }
     
+    func test_loadTwice_requestDataFromURL() async throws {
+        let url = URL(string: "https://a-url.com")!
+        let (sut, client) = makeSUT(result: .success(validProductDetailResponse()), url: url)
+        
+        _ = try await sut.load()
+        _ = try await sut.load()
+        
+        XCTAssertEqual(client.requestedURLs, [url, url])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>, url: URL = .init(string: "https://example.com")!) -> (ProductDetailService, HTTPClientSpy) {
