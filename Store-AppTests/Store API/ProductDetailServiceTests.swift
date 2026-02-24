@@ -62,9 +62,22 @@ final class ProductDetailServiceTests: XCTestCase {
         await expect(sut: sut, toCompleteWithError: .invalidData)
     }
     
+    @MainActor
+    func test_load_deliverOn200HTTPResponse() async {
+        let product1 = makeProduct(1, title: "string", price: 100, description: "string", category: "string", image: "http://example.com")
+        let validJSON = makeProductDetailJson(product1.json)
+        let (sut, _) = makeSUT(result: .success((validJSON, anyHttpResponse(statusCode: 200))))
+        
+        do {
+            let result = try await sut.load()
+            XCTAssertEqual(result, product1.model)
+        } catch {
+            XCTFail("Expected result but got \(error)")
+        }
+    }
+    
     
     // MARK: - Helpers
-    
     private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>, url: URL = .init(string: "https://example.com")!) -> (ProductDetailService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
         let sut = ProductDetailService(client: client, url: url)
@@ -80,8 +93,28 @@ final class ProductDetailServiceTests: XCTestCase {
         }
     }
     
+    private func makeProduct(_ id: Int, title: String, price: Double, description: String, category: String, image: String)
+    -> (model: ProductResponse, json: [String: Any]) {
+        let item = ProductResponse(id: id, title: title, price: price, description: description, category: category, image: image, isAdded: false)
+        
+        let jsonItem = [
+            "id": id,
+            "title": title,
+            "price": price,
+            "description": description,
+            "category": category,
+            "image": image
+        ].compactMapValues{$0}
+        
+        
+        return (item, jsonItem)
+    }
     
-    func validProductDetailResponse() -> (Data, HTTPURLResponse) {
+    private func makeProductDetailJson(_ productJson: [String: Any]) -> Data {
+        return try! JSONSerialization.data(withJSONObject: productJson)
+    }
+    
+    private func validProductDetailResponse() -> (Data, HTTPURLResponse) {
         let json = """
         {
             "id": 1,
