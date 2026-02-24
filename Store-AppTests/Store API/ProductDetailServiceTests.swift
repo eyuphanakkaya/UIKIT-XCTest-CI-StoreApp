@@ -41,12 +41,7 @@ final class ProductDetailServiceTests: XCTestCase {
         let error = NSError(domain: "Test", code: 0)
         let (sut, _) = makeSUT(result: .failure(error))
         
-        do {
-            let result = try await sut.load()
-            XCTFail("Expected error , got \(result)")
-        } catch {
-            XCTAssertEqual(error as? ProductDetailService.ProductDetailError, .connectivity)
-        }
+        await expect(sut: sut, toCompleteWithError: .connectivity)
     }
     
     func test_load_deliverErrorOnNon200HTTPResponse() async {
@@ -57,24 +52,14 @@ final class ProductDetailServiceTests: XCTestCase {
             let response = anyHttpResponse(statusCode: code)
             let (sut, _) = makeSUT(result: .success((data, response)))
             
-            do {
-                let result = try await sut.load()
-                XCTFail("Expected error, got \(result)")
-            } catch {
-                XCTAssertEqual(error as? ProductDetailService.ProductDetailError, .invalidData)
-            }
+            await expect(sut: sut, toCompleteWithError: .invalidData)
         }
     }
     
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() async {
         let (sut, _) = makeSUT(result: .success(makeInvalidJsonResponse()))
         
-        do {
-            let result = try await sut.load()
-            XCTFail("Expected error, got \(result)")
-        } catch {
-            XCTAssertEqual(error as? ProductDetailService.ProductDetailError, .invalidData)
-        }
+        await expect(sut: sut, toCompleteWithError: .invalidData)
     }
     
     
@@ -84,6 +69,15 @@ final class ProductDetailServiceTests: XCTestCase {
         let client = HTTPClientSpy(result: result)
         let sut = ProductDetailService(client: client, url: url)
         return (sut, client)
+    }
+    
+    private func expect(sut: ProductDetailService, toCompleteWithError errors: ProductDetailService.ProductDetailError) async {
+        do {
+            let result = try await sut.load()
+            XCTFail("Expected error, got \(result)")
+        } catch {
+            XCTAssertEqual(error as? ProductDetailService.ProductDetailError, errors)
+        }
     }
     
     
