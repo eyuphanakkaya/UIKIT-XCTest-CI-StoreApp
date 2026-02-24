@@ -78,21 +78,21 @@ final class ProductDetailServiceTests: XCTestCase {
     
     
     // MARK: - Helpers
-    private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>, url: URL = .init(string: "https://example.com")!) -> (ProductDetailService, HTTPClientSpy) {
+    private func makeSUT(result: Result<(Data, HTTPURLResponse), Error>, url: URL = .init(string: "https://example.com")!, file: StaticString = #file, line: UInt = #line) -> (ProductDetailService, HTTPClientSpy) {
         let client = HTTPClientSpy(result: result)
         let sut = ProductDetailService(client: client, url: url)
         
-        trackForMemoryLeaks(sut)
+        trackForMemoryLeaks(sut, file: file, line: line)
         
         return (sut, client)
     }
     
-    private func expect(sut: ProductDetailService, toCompleteWithError errors: ProductDetailService.ProductDetailError) async {
+    private func expect(sut: ProductDetailService, toCompleteWithError errors: ProductDetailService.ProductDetailError, file: StaticString = #file, line: UInt = #line) async {
         do {
             let result = try await sut.load()
-            XCTFail("Expected error, got \(result)")
+            XCTFail("Expected error, got \(result)", file: file, line: line)
         } catch {
-            XCTAssertEqual(error as? ProductDetailService.ProductDetailError, errors)
+            XCTAssertEqual(error as? ProductDetailService.ProductDetailError, errors, file: file, line: line)
         }
     }
     
