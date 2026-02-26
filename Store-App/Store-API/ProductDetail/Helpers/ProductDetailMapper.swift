@@ -7,10 +7,10 @@
 
 import Foundation
 
-final class ProductDetailMapper {
-    func map(data: Data, from response: HTTPURLResponse) throws -> ProductResponse {
+struct ProductDetailMapper {
+    public static func map(data: Data, from response: HTTPURLResponse) throws -> ProductResponse {
         guard response.statusCode == 200  else {
-            throw ProductDetailService.ProductDetailError.invalidData
+            throw RemoteLoader<ProductResponse>.Error.invalidData
         }
 
         let decoder = JSONDecoder()

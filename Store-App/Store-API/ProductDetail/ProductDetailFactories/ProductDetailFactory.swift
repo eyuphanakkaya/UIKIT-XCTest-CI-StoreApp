@@ -14,7 +14,9 @@ final class ProductDetailFactory {
         let detailUrl = URL(string: APIConstants.baseURL + "\(id)")!
         let productsUrl = URL(string: APIConstants.baseURL)!
         
-        let detailService = ProductDetailService(client: httpClient, url: detailUrl)
+        let detailService = RemoteLoader<ProductResponse>(client: httpClient, url: detailUrl, closure: { data, response in
+            try ProductDetailMapper.map(data: data, from: response)
+        })
         
         let productsService = RemoteLoader<[ProductResponse]>(client: httpClient, url: productsUrl, closure: { data, response in
             try ProductMapper.map(data: data, from: response)
