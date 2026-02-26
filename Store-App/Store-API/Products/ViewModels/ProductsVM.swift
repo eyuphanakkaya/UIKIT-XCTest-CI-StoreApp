@@ -9,14 +9,14 @@ import Foundation
 
 @MainActor
 final class ProductsVM {
-    private let service: ProductsService
+    private let service: RemoteLoader<[ProductResponse]>
     private let storage: StoreStorage
     var products: [ProductResponse] = []
     
     var onSuccess: (() -> Void)?
     var onFailure: ((Error) -> Void)?
     
-    init(service: ProductsService, storage: StoreStorage) {
+    init(service: RemoteLoader<[ProductResponse]>, storage: StoreStorage) {
         self.service = service
         self.storage = storage
     }

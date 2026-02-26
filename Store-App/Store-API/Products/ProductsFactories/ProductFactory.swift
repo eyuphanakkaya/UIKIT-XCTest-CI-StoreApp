@@ -14,7 +14,9 @@ final class ProductFactory {
         let urlString = APIConstants.baseURL + "category/\(categoryName.lowercased())"
         let url = URL(string: urlString)!
         
-        let service = ProductsService(client: client, url: url)
+        let service = RemoteLoader<[ProductResponse]>(client: client, url: url, closure: { data, response in
+            try ProductMapper.map(data: data, from: response)
+        })
         let storage = UserDefaultManager()
         let viewModel = ProductsVM(service: service, storage: storage)
         let vc = ProductsVC(viewModel: viewModel, headerTitle: categoryName)
