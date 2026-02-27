@@ -10,7 +10,7 @@ import Store_App
 
 
 @MainActor
-final class ProductsServiceAPIEndToEndTests: XCTestCase {
+final class ProductsMapperAPIEndToEndTests: XCTestCase {
     func test_endToEndTestServerGetResult_matchesFixedTestAccountData() async {
         let url = URL(string: "https://fakestoreapi.com/products/category/men's clothing")!
         let client = URLSessionHTTPClient()
