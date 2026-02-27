@@ -9,7 +9,7 @@ import XCTest
 import Store_App
 
 @MainActor
-final class CategoryServiceAPIEndToEndTests: XCTestCase {
+final class CategoryMapperAPIEndToEndTests: XCTestCase {
     func test_endToEndTestServerGetResult_matchesFixedTestAccountData() async {
         let sut = makeSUT()
         
