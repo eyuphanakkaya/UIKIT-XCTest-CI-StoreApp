@@ -36,7 +36,7 @@ final class CategoryMapperAPIEndToEndTests: XCTestCase {
         })
         
         trackForMemoryLeaks(service, file: file, line: line)
-//        trackForMemoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
         
         return service
     }
