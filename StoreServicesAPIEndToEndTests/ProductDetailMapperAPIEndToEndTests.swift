@@ -28,12 +28,15 @@ final class ProductDetailMapperAPIEndToEndTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT() -> RemoteLoader<ProductResponse> {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line ) -> RemoteLoader<ProductResponse> {
         let url = URL(string: "https://fakestoreapi.com/products/1")!
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let sut = RemoteLoader<ProductResponse>(client: client, url: url, closure: { data, response in
             try ProductDetailMapper.map(data: data, from: response)
         })
+        
+        trackForMemoryLeaks(client, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         
         return sut
     }
