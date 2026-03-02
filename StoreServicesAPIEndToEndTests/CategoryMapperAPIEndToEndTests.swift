@@ -28,15 +28,15 @@ final class CategoryMapperAPIEndToEndTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func makeSUT() -> RemoteLoader<[String]>  {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> RemoteLoader<[String]>  {
         let testServerURL = URL(string: "https://fakestoreapi.com/products/categories")!
         let client = URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
         let service = RemoteLoader(client: client, url: testServerURL, closure: { data, response in
             try CategoryMapper.map(data: data, from: response)
         })
         
-        trackForMemoryLeaks(service)
-        trackForMemoryLeaks(client)
+        trackForMemoryLeaks(service, file: file, line: line)
+        trackForMemoryLeaks(client, file: file, line: line)
         
         return service
     }
