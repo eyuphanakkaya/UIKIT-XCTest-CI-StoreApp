@@ -35,6 +35,9 @@ final class CategoryMapperAPIEndToEndTests: XCTestCase {
             try CategoryMapper.map(data: data, from: response)
         })
         
+        trackForMemoryLeaks(service)
+        trackForMemoryLeaks(client)
+        
         return service
     }
     

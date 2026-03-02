@@ -50,6 +50,13 @@
 			);
 			target = A44782162F1D038C00AEB93D /* Store-App */;
 		};
+		A49CDE352F55B8F200119842 /* Exceptions for "Store-AppTests" folder in "StoreServicesAPIEndToEndTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Store API/Helpers/XCTestCase + MemoryLeakTracking.swift",
+			);
+			target = A419A5F32F4F184100D12E2B /* StoreServicesAPIEndToEndTests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -68,6 +75,9 @@
 		};
 		A44782302F1D038D00AEB93D /* Store-AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A49CDE352F55B8F200119842 /* Exceptions for "Store-AppTests" folder in "StoreServicesAPIEndToEndTests" target */,
+			);
 			path = "Store-AppTests";
 			sourceTree = "<group>";
 		};
