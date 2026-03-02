@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "AAEB1AAB-A30E-4A8F-BB4E-4325144E5967",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Store-App.xcodeproj",
+      "identifier" : "A44782162F1D038C00AEB93D",
+      "name" : "Store-App"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Store-App.xcodeproj",
+        "identifier" : "A419A5F32F4F184100D12E2B",
+        "name" : "StoreServicesAPIEndToEndTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Store-App.xcodeproj",
+        "identifier" : "A447822C2F1D038D00AEB93D",
+        "name" : "Store-AppTests"
+      }
+    }
+  ],
+  "version" : 1
+}

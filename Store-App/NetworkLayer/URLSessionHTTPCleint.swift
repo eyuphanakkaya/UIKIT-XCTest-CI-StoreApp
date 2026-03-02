@@ -8,14 +8,14 @@
 import Foundation
 
 
-final class URLSessionHTTPClient: HTTPClient {
+final public class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
-    init(session: URLSession = .shared) {
+    public init(session: URLSession = .shared) {
         self.session = session
     }
     
-    func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
+    public func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
         let (data, response) = try await session.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse else {

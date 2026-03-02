@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProductResponse {
+public struct ProductResponse: Equatable {
     let id: Int
     let title: String
     let price: Double
@@ -19,6 +19,16 @@ struct ProductResponse {
     
     var convertToIdString : String {
         return "\(id)"
+    }
+    
+    public init(id: Int, title: String, price: Double, description: String, category: String, image: String, isAdded: Bool) {
+        self.id = id
+        self.title = title
+        self.price = price
+        self.description = description
+        self.category = category
+        self.image = image
+        self.isAdded = isAdded
     }
 }
 

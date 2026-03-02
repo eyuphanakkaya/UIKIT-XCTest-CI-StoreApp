@@ -9,8 +9,8 @@ import Foundation
 
 @MainActor
 final class ProductDetailsVM {
-    private let detailService: ProductDetailService
-    private let productsService: ProductsService
+    private let detailService: RemoteLoader<ProductResponse>
+    private let productsService: RemoteLoader<[ProductResponse]>
     private let storage: StoreStorage
     
     var title: String
@@ -27,8 +27,8 @@ final class ProductDetailsVM {
     
     var onSuccess: (() -> Void)?
     
-    init(detailService: ProductDetailService,
-         productsService: ProductsService,
+    init(detailService: RemoteLoader<ProductResponse>,
+         productsService: RemoteLoader<[ProductResponse]>,
          title: String,
          storage: StoreStorage) {
         

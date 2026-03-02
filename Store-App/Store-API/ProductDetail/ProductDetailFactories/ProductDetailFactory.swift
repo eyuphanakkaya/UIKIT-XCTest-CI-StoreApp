@@ -14,8 +14,13 @@ final class ProductDetailFactory {
         let detailUrl = URL(string: APIConstants.baseURL + "\(id)")!
         let productsUrl = URL(string: APIConstants.baseURL)!
         
-        let detailService = ProductDetailService(httpClient: httpClient, url: detailUrl)
-        let productsService = ProductsService(client: httpClient, url: productsUrl)
+        let detailService = RemoteLoader<ProductResponse>(client: httpClient, url: detailUrl, closure: { data, response in
+            try ProductDetailMapper.map(data: data, from: response)
+        })
+        
+        let productsService = RemoteLoader<[ProductResponse]>(client: httpClient, url: productsUrl, closure: { data, response in
+            try ProductMapper.map(data: data, from: response)
+        })
         let storage = UserDefaultManager()
         
         let viewModel = ProductDetailsVM(detailService: detailService, productsService: productsService, title: title, storage: storage)

@@ -8,12 +8,12 @@
 import Foundation
 
 final class CategoryVM {
-    private let service: CategoryService
+    private let service: RemoteLoader<[String]>
     
     var categories: [String] = []
     var onSuccess: (() -> Void)?
     
-    init(service: CategoryService) {
+    init(service: RemoteLoader<[String]>) {
         self.service = service
     }
 }
