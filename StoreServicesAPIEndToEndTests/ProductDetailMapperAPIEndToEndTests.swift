@@ -12,11 +12,7 @@ import Store_App
 final class ProductDetailMapperAPIEndToEndTests: XCTestCase {
     
     func test_endToEndTestServerGetResult_matchesFixedTestAccountData() async {
-        let url = URL(string: "https://fakestoreapi.com/products/1")!
-        let client = URLSessionHTTPClient()
-        let sut = RemoteLoader<ProductResponse>(client: client, url: url, closure: { data, response in
-            try ProductDetailMapper.map(data: data, from: response)
-        })
+        let sut = makeSUT()
         
         do {
             let result = try await sut.load()
@@ -31,6 +27,18 @@ final class ProductDetailMapperAPIEndToEndTests: XCTestCase {
     
     
     // MARK: - Helpers
+    
+    private func makeSUT() -> RemoteLoader<ProductResponse> {
+        let url = URL(string: "https://fakestoreapi.com/products/1")!
+        let client = URLSessionHTTPClient()
+        let sut = RemoteLoader<ProductResponse>(client: client, url: url, closure: { data, response in
+            try ProductDetailMapper.map(data: data, from: response)
+        })
+        
+        return sut
+    }
+    
+    
     private func expectedItem() -> ProductResponse {
         return ProductResponse(id: 1,
                                title: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
