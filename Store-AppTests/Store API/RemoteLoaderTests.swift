@@ -87,6 +87,20 @@ final class RemoteLoaderTests: XCTestCase {
         return (sut,client)
     }
     
+    private final class HTTPClientSpy: HTTPClient {
+        var requestedURLs = [URL]()
+        private let result: Result<(Data, HTTPURLResponse), Error>
+    
+        init(result: Result<(Data, HTTPURLResponse), Error>) {
+            self.result = result
+        }
+    
+        func get(_ url: URL) async throws -> (Data, HTTPURLResponse) {
+            requestedURLs.append(url)
+            return try result.get()
+        }
+    }
+    
     private func expect(_ sut: RemoteLoader<String>,toCompleteWithError errors: RemoteLoader<String>.Error, file: StaticString = #file, line: UInt = #line) async {
         do {
             _ = try await sut.load()
