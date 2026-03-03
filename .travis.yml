@@ -1,4 +1,13 @@
+language: swift
 os: osx
-osx_image: xcode10.1
-language: swift 
-script: xcodebuild clean build teest -project Store-App/Store-App.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+osx_image: xcode14.3
+
+script:
+- xcodebuild clean test \
+      -project Store-App.xcodeproj \
+      -scheme "CI" \
+      -destination "platform=iOS Simulator,OS=18.2,name=iPhone SE (3rd generation)" \
+      -testPlan CITestPlan \
+      CODE_SIGN_IDENTITY="" \
+      CODE_SIGNING_REQUIRED=NO \
+      ONLY_ACTIVE_ARCH=NO
